@@ -14,20 +14,33 @@
 
 
 #############################################################
+#                   Funções do script                       #
+#############################################################
+
+|  1 - Instalar os pacotes necessários 
+|  2 - Configurar Hosts  
+|  3 - Copiar e configurar o Hadoop, Spark e Mahout
+|  4 - Configurar variáveis de ambiente
+|  5 - Configurar permissões
+|  SSH  - Configurar SSH
+|  DEL  - Deletar todas configurações da máquina local 
+|  EXIT - Sair do script
+
+
+#############################################################
 #   Requisitos para que este script funcione corretamente   #
 #############################################################
 
 1- Instalar o ubuntu com nome do computador e usuário iguais,
    ou seja: $HOSTNAME deve ser igual ao $USER
-2- $USER do master tem que ser = "master"
+2- $USER do master tem que ser="master" ou editar em core-site.xml
 
 
 #############################################################
 #          Para executar o script é necessário              #
 #############################################################
 
-1- Configurar o IP das máquinas (No final do script tem informação 
-	sobre os IPs do Lab235)
+1- Configurar o IP das máquinas (Veja o final deste README)
 
 2- Baixe ou envie o arquivo hadoop-install.tar.gz para pasta home:
 	scp USUARIOREMOTO@IP:/home/USUARIOREMOTO/hadoop-install.tar.gz ~/
@@ -37,7 +50,7 @@
 	tar -xzvf ~/hadoop-install.tar.gz
 
 5- Entrar no diretório estraído
-	cd ~/hadoop-install
+    cd ~/hadoop-install
 
 4- Crie uma pasta chamada: local
 
@@ -118,6 +131,6 @@ http://127.0.0.1:8080/
 #############################################################
 #   IP:         10.1.1.x                                    #
 #   Máscara:    255.255.255.0                               #
-#	Gateway:    10.1.1.1                                    #
+#   Gateway:    10.1.1.1                                    #
 #   DNS:        208.67.222.222, 208.67.220.220              #
 #############################################################

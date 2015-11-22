@@ -26,7 +26,7 @@ function menu () {
 		echo "|                                                   | v2.1|"
 		echo "|  1 - Instalar os pacotes necessários              ======|"
 		echo "|  2 - Configurar Hosts                                   |"
-		echo "|  3 - Copiar e configurar                                |"
+		echo "|  3 - Copiar e configurar o Hadoop, Spark e Mahout       |"
 		echo "|  4 - Configurar variáveis de ambiente                   |"
 		echo "|  5 - Configurar permissões                              |"
 		echo "|                                                         |"
