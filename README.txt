@@ -31,9 +31,10 @@
 #   Requisitos para que este script funcione corretamente   #
 #############################################################
 
-1- Instalar o ubuntu com nome do computador e usuário iguais,
-   ou seja: $HOSTNAME deve ser igual ao $USER
-2- $USER do master tem que ser="master" ou editar em core-site.xml
+1- Instalar o ubuntu com nome do computador e usuário 
+   iguais, ou seja: $HOSTNAME deve ser igual ao $USER
+2- $USER do master tem que ser="master" ou editar em 
+   /conf/etc-hadoop/core-site.xml
 
 
 #############################################################
