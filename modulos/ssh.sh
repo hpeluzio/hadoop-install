@@ -35,31 +35,83 @@ function keygenlocal () {
 
 function keygencluster () {
 
-	i=1
-	while [ $i -le ${#sshiparray[@]} ]; do
-		echo "[X] Criando-key na máquina "${sshiparray[i]} 
-		ssh -o "StrictHostKeyChecking no" ${sshiparray[i]} "ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa"
+	while true; do
 
-		i=$(( $i + 1 )) #i++
+		echo "==========================================================="
+		echo "|               Gerar Key SSH nas máquinas                |"
+		echo "|    Esse procedimento é feito apenas uma vez no master.  |"
+		echo "|    Deseja continuar?                                    |"
+		echo "|  Sim (s)                                                |"
+		echo "|  Não (n)                                                |"
+		echo "==========================================================="
+
+		read opcao
+
+		if [ "$opcao" == "s" ]; then 
+			echo "==========================================================="
+			echo "|                    Gerando Keys...                      |"
+			echo "==========================================================="
+			i=1
+			while [ $i -le ${#sshiparray[@]} ]; do
+				echo "[X] Criando-key na máquina "${sshiparray[i]} 
+				ssh -o "StrictHostKeyChecking no" ${sshiparray[i]} "ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa"
+
+				i=$(( $i + 1 )) #i++
+			done
+			break # SAIR DO WHILE
+
+		elif [ "$opcao" == "n" ]; then 
+			echo "Voltando para o menu SSH."
+			break # SAIR DO WHILE
+		else 
+			echo "Opção inválida!"
+		fi
 	done
 
 }
 
 function enviakey () {
 
-	if [ -e "/home/$HOSTNAME/.ssh" ]; then
-		i=1
-		while [ $i -le ${#sshiparray[@]} ]; do
-			echo "[X] Enviando key para máquina: "${sshiparray[i]} 
-			cat ~/.ssh/id_rsa.pub | ssh -o "StrictHostKeyChecking no" ${sshiparray[i]} 'cat >> ~/.ssh/authorized_keys'
-			#ssh -o "StrictHostKeyChecking no" ${sshiparray[i]} 'ssh-add'
 
-			i=$(( $i + 1 )) #i++
-		done
+	while true; do
 
-	else
-		echo "[-] Diretório SSH não existe."
-	fi
+		echo "==========================================================="
+		echo "|      Enviar Key SSH para todas máquinas do cluster      |"
+		echo "|    Esse procedimento é feito apenas quando necessário.  |"
+		echo "|    Deseja continuar?                                    |"
+		echo "|  Sim (s)                                                |"
+		echo "|  Não (n)                                                |"
+		echo "==========================================================="
+
+		read opcao
+
+		if [ "$opcao" == "s" ]; then 
+			echo "==========================================================="
+			echo "|                     Enviado Keys...                     |"
+			echo "==========================================================="
+
+			if [ -e "/home/$HOSTNAME/.ssh" ]; then
+				i=1
+				while [ $i -le ${#sshiparray[@]} ]; do
+					echo "[X] Enviando key para máquina: "${sshiparray[i]} 
+					cat ~/.ssh/id_rsa.pub | ssh -o "StrictHostKeyChecking no" ${sshiparray[i]} 'cat >> ~/.ssh/authorized_keys'
+					#ssh -o "StrictHostKeyChecking no" ${sshiparray[i]} 'ssh-add'
+
+					i=$(( $i + 1 )) #i++
+				done
+
+			else
+				echo "[-] Diretório local SSH não existe."
+			fi
+			break # SAIR DO WHILE
+
+		elif [ "$opcao" == "n" ]; then 
+			echo "Voltando para o menu SSH."
+			break # SAIR DO WHILE
+		else 
+			echo "Opção inválida!"
+		fi 
+	done
 
 }
 
@@ -89,14 +141,42 @@ function deletapastasshlocal () {
 
 function deletapastasshcluster () {
 
-	i=1
-	while [ $i -le ${#sshiparray[@]} ]; do
-		echo "[X] Deletando pastas SSH das máquinas " ${sshiparray[i]} 
-		ssh -o "StrictHostKeyChecking no" ${sshiparray[i]} 'rm -rf ~/.ssh'
+	while true; do
 
-		i=$(( $i + 1 )) #i++
+		echo "==========================================================="
+		echo "|        Deletar Keys SSH de todas máquinas do cluster    |"
+		echo "|    Esse procedimento é feito apenas quando necessário.  |"
+		echo "|    Deseja continuar?                                    |"
+		echo "|  Sim (s)                                                |"
+		echo "|  Não (n)                                                |"
+		echo "==========================================================="
+
+		read opcao
+
+		if [ "$opcao" == "s" ]; then 
+			echo "==========================================================="
+			echo "|                    Deletando Keys...                    |"
+			echo "==========================================================="
+			i=1
+			while [ $i -le ${#sshiparray[@]} ]; do
+				echo "[X] Deletando pastas SSH das máquinas " ${sshiparray[i]} 
+				ssh -o "StrictHostKeyChecking no" ${sshiparray[i]} 'rm -rf ~/.ssh/*'
+
+				i=$(( $i + 1 )) #i++
+			done
+			break # SAIR DO WHILE
+
+		elif [ "$opcao" == "n" ]; then 
+			echo "Voltando para o menu SSH."
+			break # SAIR DO WHILE
+		else 
+			echo "Opção inválida!"
+		fi 
 	done
+}
 
+function sshadd () {
+	SSH_AUTH_SOCK=0
 }
 
 # Menu
@@ -109,16 +189,17 @@ function menu () {
 		echo "|               SCRIPT PARA INSTALAÇÃO DO SSH               |"
 		echo "|===========================================================|"
 		echo "|                                                           |"
-		echo "|  1   - Rodar ssh-keygen em todas máquinas do cluster      |"		
-		echo "|  2   - Enviar key para todas máquinas do                  |"
-		echo "|  DEL - Deletar as pastas .ssh de todas máquinas           |"
+		echo "|  1   - Criar key SSH em todas máquinas do cluster         |"		
+		echo "|  2   - Enviar key local para todas máquinas do cluster    |"
+		echo "|  3   - Fixar o bug do ssh-add                             |"
+		echo "|  DEL - Deletar o conteúdo .ssh de todas máquinas          |"
 		echo "|                                                           |"
 		echo "|  EXIT - Voltar para o menu principal                      |"
 		echo "|                                                           |"
-		echo "|=============    Comandos de Contingêcia    ===============|"
-		echo "|  11   - Rodar ssh-keygen apenas na máquina local          |"      
-		echo "|  DL   - Deletar a pasta .ssh somente na máquina local     |" 
-		echo "|  CHMOD- Dar permissões nas pastas das outras máquinas     |" 
+		#echo "|=============    Comandos de Contingêcia    ===============|"
+		#echo "|  11   - Rodar ssh-keygen apenas na máquina local          |"      
+		#echo "|  DL   - Deletar a pasta .ssh somente na máquina local     |" 
+		#echo "|  CHMOD- Dar permissões nas pastas das outras máquinas     |" 
 		echo "============================================================="
 		echo ">"
 		read OPCAO
@@ -132,6 +213,10 @@ function menu () {
 			#
 			2)
 				enviakey
+			;;
+			#
+			3)
+				sshadd
 			;;
 			#
 			del|DEL)
