@@ -176,6 +176,9 @@ function deletapastasshcluster () {
 }
 
 function sshadd () {
+	echo "==========================================================="
+	echo "|                Fixando com SSH_AUTH_SOCK=0              |"
+	echo "==========================================================="
 	SSH_AUTH_SOCK=0
 }
 
