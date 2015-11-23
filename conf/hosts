@@ -1,14 +1,21 @@
 127.0.0.1       localhost
-master		10.1.1.100
-slave1		10.1.1.101
-slave2		10.1.1.102
-slave3		10.1.1.103
-slave4		10.1.1.104
-slave5		10.1.1.105
-slave6		10.1.1.106
-slave7		10.1.1.107
-slave8		10.1.1.108
-slave9		10.1.1.109
+
+#########################
+#    Hosts do Hadoops   #
+#########################
+
+10.1.1.100	master
+10.1.1.101	slave1
+10.1.1.102	slave2
+10.1.1.103	slave3
+10.1.1.104	slave4
+10.1.1.105	slave5
+10.1.1.106	slave6
+10.1.1.107	slave7
+10.1.1.108	slave8
+10.1.1.109	slave9
+
+##########################
 
 # The following lines are desirable for IPv6 capable hosts
 ::1     ip6-localhost ip6-loopback
