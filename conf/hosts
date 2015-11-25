@@ -1,9 +1,7 @@
 127.0.0.1       localhost
 
 #########################
-#    Hosts do Hadoops   #
-#########################
-
+#    Hosts do Hadoop    #
 10.1.1.100	master
 10.1.1.101	slave1
 10.1.1.102	slave2
@@ -14,7 +12,6 @@
 10.1.1.107	slave7
 10.1.1.108	slave8
 10.1.1.109	slave9
-
 ##########################
 
 # The following lines are desirable for IPv6 capable hosts
