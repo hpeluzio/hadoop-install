@@ -23,18 +23,18 @@ function masterouslave () {
 	while true; do
 
 		echo "==========================================================="
-		echo "|           Essa máquina será master ou slave?            |"
+		echo "|     Essa máquina será master, slave ou singlenode?      |"
 		echo "|                                                         |"
 		echo "|   (m) Para MASTER                                       |"
 		echo "|   (s) Para SLAVE                                        |"
+		echo "|   (single) Para SINGLENODE                              |"
 		echo "|                                                         |"
 		echo "|   EXIT - Voltar para o menu                             |"
 		echo "==========================================================="
 
 		read MASTEROUSLAVE
 
-		if [ "$MASTEROUSLAVE" == "m" ] || [ "$MASTEROUSLAVE" == "s" ]
-		then 
+		if [ "$MASTEROUSLAVE" == "m" ] || [ "$MASTEROUSLAVE" == "s" ] || [ "$MASTEROUSLAVE" == "single" ]; then 
 			break
 		else
 			echo "Opção inválida!"
@@ -70,14 +70,37 @@ function func_hadoop () {
 		
 		#Master
 		if [ "$MASTEROUSLAVE" == "m" ]; then
+			#Comum
+			cp -r conf/etc-hadoop/core-site.xml /usr/local/hadoop/etc/hadoop
+			cp -r conf/etc-hadoop/hadoop-env.sh /usr/local/hadoop/etc/hadoop
+			cp -r conf/etc-hadoop/mapred-site.xml /usr/local/hadoop/etc/hadoop
+			cp -r conf/etc-hadoop/yarn-site.xml /usr/local/hadoop/etc/hadoop
+			
 			cp -r conf/slaves /usr/local/hadoop/etc/hadoop 
 			cp -r conf/etc-hadoop/hdfs-site-MASTER.xml /usr/local/hadoop/etc/hadoop/hdfs-site.xml
 			mkdir -p /usr/local/hadoop/hdfs/{datanode,namenode}
 
 		#Slave
 		elif [ "$MASTEROUSLAVE" == "s" ]; then
+			#Comum
+			cp -r conf/etc-hadoop/core-site.xml /usr/local/hadoop/etc/hadoop
+			cp -r conf/etc-hadoop/hadoop-env.sh /usr/local/hadoop/etc/hadoop
+			cp -r conf/etc-hadoop/mapred-site.xml /usr/local/hadoop/etc/hadoop
+			cp -r conf/etc-hadoop/yarn-site.xml /usr/local/hadoop/etc/hadoop
+
 			mkdir -p /usr/local/hadoop/hdfs/datanode
 			cp -r conf/etc-hadoop/hdfs-site-SLAVES.xml /usr/local/hadoop/etc/hadoop/hdfs-site.xml
+		#Singlenode
+		elif [ "$MASTEROUSLAVE" == "single" ]; then
+			#Single
+			cp -r conf/etc-hadoop/singlenode/core-site.xml /usr/local/hadoop/etc/hadoop
+			cp -r conf/etc-hadoop/singlenode/hadoop-env.sh /usr/local/hadoop/etc/hadoop
+			cp -r conf/etc-hadoop/singlenode/mapred-site.xml /usr/local/hadoop/etc/hadoop
+			cp -r conf/etc-hadoop/singlenode/yarn-site.xml /usr/local/hadoop/etc/hadoop
+
+			cp -r conf/etc-hadoop/singlenode/slaves /usr/local/hadoop/etc/hadoop 
+			cp -r conf/etc-hadoop/singlenode/hdfs-site.xml /usr/local/hadoop/etc/hadoop/hdfs-site.xml
+			mkdir -p /usr/local/hadoop/hdfs/{datanode,namenode}
 		fi
 	fi
 }
@@ -102,6 +125,9 @@ function func_spark () {
 		if [ "$MASTEROUSLAVE" == "m" ]; then 
 			echo "[X] Copiando configurações do Spark $1."
 			cp -r conf/sparkslaves /usr/local/spark/conf/slaves
+		elif [ "$MASTEROUSLAVE" == "single" ]; then 
+			echo "[X] Copiando configurações do Spark $1."
+			cp -r conf/etc-hadoop/singlenode/slaves /usr/local/spark/conf/slaves
 		fi
 	fi
 }

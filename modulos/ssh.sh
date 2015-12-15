@@ -182,6 +182,54 @@ function sshadd () {
 	SSH_AUTH_SOCK=0
 }
 
+function sshsingle () {
+
+	while true; do
+
+		echo "==========================================================="
+		echo "|               Gerar Key SSH na máquina local?           |"
+		echo "|  Sim (s)                                                |"
+		echo "|  Não (n)                                                |"
+		echo "==========================================================="
+
+		read opcao
+
+		if [ "$opcao" == "s" ]; then 
+			echo "==========================================================="
+			echo "|                  Gerando Key Local...                   |"
+			echo "==========================================================="
+
+			#Gerando Key
+			keygenlocal
+
+
+			echo "==========================================================="
+			echo "|           Enviado Key para máquina local...             |"
+			echo "==========================================================="
+
+			#Enviando Key
+			cat ~/.ssh/id_rsa.pub | ssh -o "StrictHostKeyChecking no" localhost 'cat >> ~/.ssh/authorized_keys'
+
+			break #SAIR DO WHILE
+
+
+		elif [ "$opcao" == "n" ]; then 
+			echo "Voltando para o menu SSH."
+			break #SAIR DO WHILE
+		else 
+			echo "Opção inválida!"
+		fi
+	done
+
+
+
+	echo "==========================================================="
+	echo "|                Fixando com SSH_AUTH_SOCK=0              |"
+	echo "==========================================================="
+	SSH_AUTH_SOCK=0
+}
+
+
 # Menu
 function menu () {
 	while true; do
@@ -195,9 +243,12 @@ function menu () {
 		echo "|  1   - Criar key SSH em todas máquinas do cluster         |"		
 		echo "|  2   - Enviar key local para todas máquinas do cluster    |"
 		echo "|  3   - Fixar o bug do ssh-add                             |"
-		echo "|  DEL - Deletar o conteúdo .ssh de todas máquinas          |"
 		echo "|                                                           |"
-		echo "|  EXIT - Voltar para o menu principal                      |"
+		echo "|  SINGLE    - Configurar SSH para máquina Singlenode       |"
+		echo "|  DEL       - Deletar o conteúdo .ssh de todas máquinas    |"
+		echo "|  DELSINGLE - Deletar a pasta .ssh somente na máquina local|" 
+		echo "|                                                           |"
+		echo "|  EXIT   - Voltar para o menu principal                    |"
 		echo "|                                                           |"
 		#echo "|=============    Comandos de Contingêcia    ===============|"
 		#echo "|  11   - Rodar ssh-keygen apenas na máquina local          |"      
@@ -222,20 +273,23 @@ function menu () {
 				sshadd
 			;;
 			#
+			single|SINGLE)
+				sshsingle
+			;;
+			#
 			del|DEL)
 				deletapastasshcluster
 			;;
 			#
-
+			dels|DELS)
+				deletapastasshcluster
+			;;
+			#
 			chmod|CHMOD)
 				permissaossh
 			;;
 			#
-			11)
-				keygenlocal
-			;;
-			#
-			dl|DL)
+			dl|ds|delsingle|DELSINGLE)
 				deletapastasshlocal
 			;;
 
