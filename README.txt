@@ -5,7 +5,7 @@
 #############################################################
 #         Criado por: Henrique Arruda Peluzio               #
 #############################################################
-#                     Versão 2.1                            #
+#                     Versão 3.0                            #
 #############################################################    
 
 	Este script foi criado para ajudar na instalação e 
@@ -53,9 +53,10 @@
 5- Entrar no diretório estraído
     cd ~/hadoop-install
 
-4- Crie uma pasta chamada: local
+4- Crie uma pasta chamada: local/hadoop local/spark e local/mahout
 
-5- Copiar os arquivos do hadoop, spark e mahout para pasta local
+5- Copiar os arquivos do hadoop, spark e mahout para pasta local/hadoop 
+local/spark e local/mahout respectivamente
 	hadoop-2.7.1.tar.gz
 	hadoop-2.4.0.tar.gz
 	spark-1.5.2-bin-hadoop2.6.tgz 
